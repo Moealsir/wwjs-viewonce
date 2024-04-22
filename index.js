@@ -140,11 +140,11 @@ function defineReportsCustomLogs(head, data, type){
 // Functions => Define Custom Init for OS Terminal
 function init(){
     console.log('\n');
-    console.log(colors.yellow('   ███ ███   ██████   ███████    ██    ██       ███████ ████████ ██████  '));
-    console.log(colors.yellow('  ██ ███ ██ ██    ██  ██       ██  ██  ██       ██         ██    ██   ██ '));
-    console.log(colors.yellow('  ██  █  ██ ██    ██  ███████ ██    ██ ██       ███████    ██    █████   '));
-    console.log(colors.yellow('  ██     ██ ██    ██  ██      ████████ ██            ██    ██    ██  ██  '));
-    console.log(colors.yellow('  ██     ██  ██████   ███████ ██    ██ ████████ ███████ ████████ ██   ██ '));
+    console.log(colors.yellow('   ███ ███   ██████  ███████    ██    ██       ███████ ████████ ██████  '));
+    console.log(colors.yellow('  ██ ███ ██ ██    ██ ██       ██  ██  ██       ██         ██    ██   ██ '));
+    console.log(colors.yellow('  ██  █  ██ ██    ██ ███████ ██    ██ ██       ███████    ██    █████   '));
+    console.log(colors.yellow('  ██     ██ ██    ██ ██      ████████ ██            ██    ██    ██  ██  '));
+    console.log(colors.yellow('  ██     ██  ██████  ███████ ██    ██ ████████ ███████ ████████ ██   ██ '));
     console.log('\n');
     console.log(colors.cyan('  WHATSAPP WEB - VIEW ONCE .JS'));
     console.log('  https://github.com/Moealsir/wwjs-viewonce\n');
