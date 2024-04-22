@@ -6,6 +6,8 @@ const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const colors = require('colors');
 
+const my_number = '249123123123@c.us'
+
 // Define Whatsapp Client
 const client = new Client({
     authStrategy: new LocalAuth({ clientId: 'user' }),
@@ -50,26 +52,49 @@ client.on('message', async (message) => {
                     fs.mkdirSync(path_contact);
                     defineReportsCustomLogs("PATH", 'The "'+phone_number+'" folder was successfully created.', "path_folder")
                 }
-                defineReportsCustomLogs(message.type, 'View-once chat reiceved from "'+contact.name+'"', "whatsapp_viewonce");
+                defineReportsCustomLogs(message.type, 'View-once chat received from "'+contact.name+'"', "whatsapp_viewonce");
                 const media = await message.downloadMedia();
                 var mediaRandomKey = Math.floor(10000 + Math.random() * 90000);
-                var mediaFilename = phone_number+'_'+user_type+'_'+date_string+"_"+mediaRandomKey; 
+                var mediaFilename = phone_number+'_'+user_type+'_'+date_string+"_"+mediaRandomKey;
                 if(message.type == 'image' && media.mimetype == 'image/jpeg'){
                     var mediaSource = "data:"+media.mimetype+";base64,"+media.data;
                     mediaSource = mediaSource.replace(/^data:image\/\w+;base64,/, "");
                     var mediaBase64 = Buffer.from(mediaSource, 'base64');
                     fs.writeFileSync(path_contact+'/'+mediaFilename+'.png', mediaBase64);
+                    // Sending the image to 'my_number'
+                    const image_name = mediaFilename+'.png';
+                    const mediaBuffer = fs.readFileSync(path_contact+'/'+image_name);
+                    const mediaMessage = MessageMedia.fromFilePath(path_contact+'/'+image_name);
+                    // client.sendMessage(message.from, mediaMessage);
+                    client.sendMessage(my_number, mediaMessage);
                 } else if(message.type == 'video' && media.mimetype == 'video/mp4'){
                     var mediaSource = "data:"+media.mimetype+";base64,"+media.data;
                     mediaSource = mediaSource.replace(/^data:(.*?);base64,/, "");
                     mediaSource = mediaSource.replace(/ /g, '+');
                     var mediaBase64 = Buffer.from(mediaSource, 'base64');
                     fs.writeFileSync(path_contact+'/'+mediaFilename+'.mp4', mediaBase64);
-                } isNotViewOnce = false;
+                    // Sending the video to 'my_number'
+                    const video_name = mediaFilename+'.mp4';
+                    const mediaBuffer = fs.readFileSync(path_contact+'/'+video_name);
+                    const mediaMessage = MessageMedia.fromFilePath(path_contact+'/'+video_name);
+                    // client.sendMessage(message.from, mediaMessage);
+                    client.sendMessage(my_number, mediaMessage);
+                } else if(message.type == 'ptt' && media.mimetype == 'audio/ogg; codecs=opus'){
+                    // Handle audio messages (ptt)
+                    var mediaBase64 = Buffer.from(media.data, 'base64');
+                    fs.writeFileSync(path_contact+'/'+mediaFilename+'.ogg', mediaBase64);
+                    // Sending the audio to 'my_number'
+                    const audio_name = mediaFilename+'.ogg';
+                    const mediaBuffer = fs.readFileSync(path_contact+'/'+audio_name);
+                    const mediaMessage = MessageMedia.fromFilePath(path_contact+'/'+audio_name);
+                    // client.sendMessage(message.from, mediaMessage);
+                    client.sendMessage(my_number, mediaMessage);
+                }
+                isNotViewOnce = false;
             }
         }
     }
-    if(isNotViewOnce){ defineReportsCustomLogs(message.type, 'Normal chat reiceved from "'+contact.name+'"', "whatsapp_message"); }
+    if(isNotViewOnce){ defineReportsCustomLogs(message.type, 'Normal chat received from "'+contact.name+'"', "whatsapp_message"); }
 });
 
 // Whatsapp => Client Initialize
@@ -113,14 +138,14 @@ function defineReportsCustomLogs(head, data, type){
 };
 
 // Functions => Define Custom Init for OS Terminal
-function init(){   
+function init(){
     console.log('\n');
-    console.log(colors.yellow('  ██     ██ ██     ██         ██    ██  ██████            ██ ███████ '));
-    console.log(colors.yellow('  ██     ██ ██     ██         ██    ██ ██    ██           ██ ██      '));
-    console.log(colors.yellow('  ██  █  ██ ██  █  ██  █████  ██    ██ ██    ██           ██ ███████ '));
-    console.log(colors.yellow('  ██ ███ ██ ██ ███ ██          ██  ██  ██    ██      ██   ██      ██ '));
-    console.log(colors.yellow('   ███ ███   ███ ███            ████    ██████   ██   █████  ███████ '));
-    console.log('\n');                                             
-    console.log(colors.cyan('  WHATSAPP WEB - VIEW ONCE .JS'));                                             
-    console.log('  https://github.com/alexduca/wwjs-viewonce\n');                                             
+    console.log(colors.yellow('   ███ ███   ██████   ███████    ██    ██       ███████ ████████ ██████  '));
+    console.log(colors.yellow('  ██ ███ ██ ██    ██  ██       ██  ██  ██       ██         ██    ██   ██ '));
+    console.log(colors.yellow('  ██  █  ██ ██    ██  ███████ ██    ██ ██       ███████    ██    █████   '));
+    console.log(colors.yellow('  ██     ██ ██    ██  ██      ████████ ██            ██    ██    ██  ██  '));
+    console.log(colors.yellow('  ██     ██  ██████   ███████ ██    ██ ████████ ███████ ████████ ██   ██ '));
+    console.log('\n');
+    console.log(colors.cyan('  WHATSAPP WEB - VIEW ONCE .JS'));
+    console.log('  https://github.com/Moealsir/wwjs-viewonce\n');
 } init();
